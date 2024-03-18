@@ -12,7 +12,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
 public class UserMealsUtil {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         List<UserMeal> meals = Arrays.asList(
                 new UserMeal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500),
                 new UserMeal(LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000),
@@ -58,32 +58,33 @@ public class UserMealsUtil {
                 .collect(Collectors.toList());
     }
 
-    public static List<UserMealWithExcess> filteredByCyclesOpt(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+    public static List<UserMealWithExcess> filteredByCyclesOpt(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) throws InterruptedException {
         Map<LocalDate, Integer> mapCaloriesAtDay = new HashMap<>();
         List<UserMealWithExcess> userMealList = new ArrayList<>();
-        CountDownLatch countDownLatch = new CountDownLatch(meals.size());
+        CountDownLatch latchCycles = new CountDownLatch(meals.size());
+        CountDownLatch latchTasks = new CountDownLatch(meals.size());
+
         for (UserMeal userMeal : meals) {
             LocalDateTime dateTime = userMeal.getDateTime();
             Integer dayCalories = mapCaloriesAtDay.getOrDefault(dateTime.toLocalDate(), 0);
             dayCalories += userMeal.getCalories();
             mapCaloriesAtDay.put(dateTime.toLocalDate(), dayCalories);
-            countDownLatch.countDown();
+            latchCycles.countDown();
             if (TimeUtil.isBetweenHalfOpen(dateTime.toLocalTime(), startTime, endTime)) {
                 new Thread(() -> {
                     try {
-                        countDownLatch.await();
+                        latchCycles.await();
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
                     userMealList.add(new UserMealWithExcess(userMeal, mapCaloriesAtDay.get(userMeal.getDateTime().toLocalDate()) > caloriesPerDay));
+                    latchTasks.countDown();
                 }).start();
+            } else {
+                latchTasks.countDown();
             }
         }
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        latchTasks.await();
         return userMealList;
     }
 }
