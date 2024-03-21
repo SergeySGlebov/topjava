@@ -40,7 +40,7 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public boolean delete(int id, int userId) {
         Meal meal = repository.get(id);
-        if (meal.getId() != userId) {
+        if (meal.getUserId() != userId) {
             return false;
         }
         return repository.remove(id) != null;
@@ -49,7 +49,7 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public Meal get(int id, int userId) {
         Meal meal = repository.get(id);
-        if (meal.getId() != userId) {
+        if (meal.getUserId() != userId) {
             return null;
         }
         return meal;
@@ -62,7 +62,7 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public List<Meal> getFiltered(LocalDate startDate, LocalDate endDate, int userId) {
-        return getFiltered(meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDate(), startDate, endDate.plusDays(1)), userId);
+        return getFiltered(meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDate(), startDate, endDate == LocalDate.MAX ? endDate : endDate.plusDays(1)), userId);
     }
 
     public List<Meal> getFiltered(Predicate<Meal> predicate, int userId) {

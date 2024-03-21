@@ -23,6 +23,40 @@
     <h2>Meals</h2>
     <a href="meals?action=create">Add Meal</a>
     <br><br>
+    <form method="get" action="meals">
+        <input type="hidden" name="action" value="filter">
+        <table>
+            <tr>
+                <td>
+                    <dl>
+                        <dt>StartDate:</dt>
+                        <dd><input type="date" value="${requestScope.startDate}" name="startDate"></dd>
+                    </dl>
+                </td>
+                <td>
+                    <dl>
+                        <dt>EndDate:</dt>
+                        <dd><input type="date" value="${requestScope.endDate}" name="endDate"></dd>
+                    </dl>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <dl>
+                        <dt>StartTime:</dt>
+                        <dd><input type="time" value="${requestScope.startTime}" name="startTime"></dd>
+                    </dl>
+                </td>
+                <td>
+                    <dl>
+                        <dt>EndTime:</dt>
+                        <dd><input type="time" value="${requestScope.endTime}" name="endTime"></dd>
+                    </dl>
+                </td>
+            </tr>
+        </table>
+        <button type="submit">Filter</button>
+    </form>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
         <tr>
@@ -49,6 +83,11 @@
             </tr>
         </c:forEach>
     </table>
+    <form method="post" action="meals?action=changeUser">
+        <p><input name="id" type="radio" value="1" ${requestScope.userId == 1 ? 'checked' : ''}> User</p>
+        <p><input name="id" type="radio" value="2" ${requestScope.userId == 2 ? 'checked' : ''}> Admin</p>
+        <p><input type="submit" value="Выбрать"></p>
+    </form>
 </section>
 </body>
 </html>
