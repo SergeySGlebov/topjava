@@ -14,6 +14,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
+import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
 
 @Controller
 public class MealRestController {
@@ -46,6 +47,7 @@ public class MealRestController {
 
     public void create(Meal meal) {
         log.info("create {}", meal);
+        checkNew(meal);
         service.create(meal, SecurityUtil.authUserId());
     }
 
@@ -56,12 +58,12 @@ public class MealRestController {
 
     public List<MealTo> getFiltered(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
         log.info("getFiltered {} {} {} {}", startDate, endDate, startTime, endTime);
-        return MealsUtil.getFilteredTos(service.getFiltered(startDate==null ? LocalDate.MIN : startDate,
-                endDate == null ? LocalDate.MAX : endDate,
+        return MealsUtil.getFilteredTos(service.getFiltered(startDate,
+                endDate,
                 SecurityUtil.authUserId()),
                 SecurityUtil.authUserCaloriesPerDay(),
-                startTime == null ? LocalTime.MIN : startTime,
-                endTime == null ? LocalTime.MAX : endTime);
+                startTime,
+                endTime);
     }
 
 }

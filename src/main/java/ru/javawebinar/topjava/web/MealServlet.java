@@ -87,10 +87,6 @@ public class MealServlet extends HttpServlet {
                                 startTime,
                                 endTime
                         ));
-                request.setAttribute("startDate", startDate);
-                request.setAttribute("endDate", endDate);
-                request.setAttribute("startTime", startTime);
-                request.setAttribute("endTime", endTime);
                 request.setAttribute("userId", SecurityUtil.authUserId());
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;

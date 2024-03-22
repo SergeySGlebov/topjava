@@ -30,13 +30,13 @@
                 <td>
                     <dl>
                         <dt>StartDate:</dt>
-                        <dd><input type="date" value="${requestScope.startDate}" name="startDate"></dd>
+                        <dd><input type="date" value="${param.startDate}" name="startDate"></dd>
                     </dl>
                 </td>
                 <td>
                     <dl>
                         <dt>EndDate:</dt>
-                        <dd><input type="date" value="${requestScope.endDate}" name="endDate"></dd>
+                        <dd><input type="date" value="${param.endDate}" name="endDate"></dd>
                     </dl>
                 </td>
             </tr>
@@ -44,13 +44,13 @@
                 <td>
                     <dl>
                         <dt>StartTime:</dt>
-                        <dd><input type="time" value="${requestScope.startTime}" name="startTime"></dd>
+                        <dd><input type="time" value="${param.startTime}" name="startTime"></dd>
                     </dl>
                 </td>
                 <td>
                     <dl>
                         <dt>EndTime:</dt>
-                        <dd><input type="time" value="${requestScope.endTime}" name="endTime"></dd>
+                        <dd><input type="time" value="${param.endTime}" name="endTime"></dd>
                     </dl>
                 </td>
             </tr>
