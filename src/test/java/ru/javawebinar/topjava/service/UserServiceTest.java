@@ -41,7 +41,7 @@ public abstract class UserServiceTest {
     private static final Logger log = getLogger("result");
 
     @Autowired
-    private UserService service;
+    protected UserService service;
 
     @Autowired
     private CacheManager cacheManager;
